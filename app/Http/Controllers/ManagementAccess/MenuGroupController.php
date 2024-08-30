@@ -49,7 +49,8 @@ class MenuGroupController extends Controller
                 'position' => MenuGroup::max('position') + 1
             ),
         ));
-        return back()->with('success', 'Route has been created successfully!');
+        alert()->success('success', 'Menu has been created successfully!');
+        return back();
     }
 
     /**
@@ -71,23 +72,39 @@ class MenuGroupController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateMenuGroupRequest $request, MenuGroup $menuGroup)
+    public function update(UpdateMenuGroupRequest $request, MenuGroup $menuGroup, $id)
     {
-        $menuGroup->update(array_merge(
-            $request->all(),
-            array('status' => ! blank($request->status) ? true : false)
-        ));
+        $data = $request->all();
+        $data['status'] = ! blank($data['status'] ?? null) ? true : false;
+        $findId = $menuGroup->find($id);
+        $findId->update($data);
 
-        return back()->with('success', 'Route has been updated successfully!');
+        alert()->success('success', 'Menu has been updated successfully!');
+        return back();
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(MenuGroup $menuGroup)
+    public function destroy($id)
     {
-        return $menuGroup->delete()
-            ? back()->with('success', 'Menu group has been deleted successfully!')
-            : back()->with('failed', 'Menu group was not deleted successfully!');
+        $decryptID = decrypt($id);
+        $menu = MenuGroup::findOrFail($decryptID);
+        $menu->delete();
+
+        alert()->success('Sukses', 'Data berhasil dihapus');
+        return back();
     }
+
+    // public function listMenu()
+    // {
+    //     $menus = MenuGroup::query()
+    //         ->with('items', function ($query) {
+    //             return $query->where('status', true)->orderBy('position');
+    //         })
+    //         ->where('status', true)
+    //         ->orderBy('position')
+    //         ->get();
+    //     return view('components.web.menu', compact('menus'));
+    // }
 }

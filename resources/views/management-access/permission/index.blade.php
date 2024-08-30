@@ -1,102 +1,174 @@
-<x-app-layout>
-  <x-slot name="header">
-    <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-      {{ __('Permission') }}
-    </h2>
-  </x-slot>
+@extends('layouts.app')
+@section('title', 'Permissions')
+@section('content')
+  <!-- Content -->
 
-  <div class="py-2">
-    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-      <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-        {{ __('Create') }}
-      </h2>
-      <div class="bg-slate-300 overflow-hidden shadow-sm sm:rounded-lg">
-        <div class="p-6 text-gray-900">
-          <form action="{{ route('permission.store') }}" method="POST">
-            @csrf
-            <div>
-              <x-input-label for="name" :value="__('Permission Name')" />
-              <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" route="name"
-                :value="old('name')" />
-              <x-input-error :messages="$errors->get('name')" class="mt-2" />
-            </div>
-            <div class="mt-4">
-              <x-input-label for="guard_name" :value="__('Guard Name')" />
-              <x-text-input id="guard_name" class="block mt-1 w-full" type="text" name="guard_name"
-                route="guard_name" :value="old('guard_name')" />
-              <x-input-error :messages="$errors->get('guard_name')" class="mt-2" />
-            </div>
-            <div class="mt-3">
-              <div class="form-check form-switch form-switch-right form-switch-md">
-                <label for="roles[]" class="form-label">Role</label>
-                <select class="form-control choices multiple-remove" id="roles[]" name="roles[]" multiple="multiple">
-                  @foreach ($roles as $role)
-                    <option value="{{ $role->name }}">{{ $role->name }}</option>
-                  @endforeach
-                </select>
+  <div class="container-xxl flex-grow-1 container-p-y">
+
+    <!-- Basic Breadcrumb -->
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="{{ route('dashboard.index') }}">Roles & Permissions</a>
+        </li>
+        <li class="breadcrumb-item active">Permissions</li>
+      </ol>
+    </nav>
+    <!-- Basic Breadcrumb -->
+
+
+    {{-- <h4 class="mb-1">Permissions List</h4>
+
+    <p class="mb-6">A role provided access to predefined menus and features so that depending on assigned role an
+      administrator can have access to what user needs.</p>
+    <!-- Role cards -->
+    <div class="row g-6"> --}}
+
+    {{-- @foreach ($Permissions as $role)
+        <div class="col-xl-4 col-lg-6 col-md-6 my-3">
+          <div class="card">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center mb-4">
+                <h6 class="fw-normal mb-0 text-body">Total {{ $role->users->count() }} users</h6>
+                <a onclick="showSweetAlert('{{ $role->id }}')" class="justify-content-end" title="delete role">
+                  <i class="bx bx-x"></i>
+                </a>
               </div>
-              <x-input-error :messages="$errors->get('roles')" class="mt-2" />
+              <form id="deleteForm_{{ $role->id }}" action="{{ route('role.destroy', $role->id) }}" method="POST">
+                @method('DELETE')
+                @csrf
+              </form>
+              <div class="d-flex justify-content-between align-items-end">
+                <div class="role-heading">
+                  <h5 class="mb-1">{{ $role->name }}</h5>
+                  <a href="javascript:;" data-bs-toggle="modal" data-bs-target="#editRoleModal-{{ $role->id }}"
+                    class="role-edit-modal"><span>Edit Role</span></a>
+                  @include('management-access.role.modal-edit')
+                </div>
+                <a href="javascript:void(0);"><i class="bx bx-copy bx-md text-muted"></i></a>
+              </div>
             </div>
-            <x-primary-button class="mt-4">
-              {{ __('Submit') }}
-            </x-primary-button>
-          </form>
+          </div>
+        </div>
+      @endforeach --}}
+
+
+    {{-- <div class="col-xl-4 col-lg-6 col-md-6 my-3">
+      <div class="card h-100">
+        <div class="row h-100">
+          <div class="col-sm-5">
+            <div class="d-flex align-items-end h-100 justify-content-center mt-sm-0 mt-4 ps-6">
+              <img src="{{ asset('sneat/assets/img/illustrations/man-with-laptop-light.png') }}" class="img-fluid"
+                alt="Image" width="120" data-app-light-img="illustrations/lady-with-laptop-light.png"
+                data-app-dark-img="illustrations/lady-with-laptop-dark.png">
+            </div>
+          </div>
+          <div class="col-sm-7">
+            <div class="card-body text-sm-end text-center ps-sm-0">
+              <button data-bs-target="#addRoleModal" data-bs-toggle="modal"
+                class="btn btn-sm btn-primary mb-4 text-nowrap add-new-role">Add New Role</button>
+              <p class="mb-0"> Add new role, <br> if it doesn't exist.</p>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
+    </div> --}}
+    {{-- <div class="col-12">
+        <h4 class="mt-6 mb-1">Total users with their roles</h4>
+        <p class="mb-0">Find all of your company’s administrator accounts and their associate roles.</p>
+      </div> --}}
+    <div class="col-12">
 
-  <div class="py-2">
-    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-      <div class="bg-slate-300 overflow-hidden shadow-sm sm:rounded-lg">
-        <div class="p-6 text-gray-900">
-          <table class="table table-hover table-nowrap mb-0" id="table1">
+      <!-- Basic Bootstrap Table -->
+      <div class="card">
+        <div class="card-header">
+          <div class="d-flex justify-content-between align-items-center">
+            <h4 class="fw-normal mb-0 text-body">Permissions </h4>
+            <button type="button" class="btn btn-primary btn-md " data-bs-toggle="modal"
+              data-bs-target="#modal-form-add-permission">
+              Add
+            </button>
+          </div>
+        </div>
+        <div class="table-responsive text-nowrap mx-2">
+          <table class="table" id="table1">
             <thead>
               <tr>
-                <th scope="col">#</th>
-                <th scope="col">Name</th>
-                <th scope="col">Guard</th>
-                <th scope="col">Role</th>
-                <th scope="col" class="col-1"></th>
+                <th>#</th>
+                <th>User</th>
+                <th>Guard Name</th>
+                <th>Assigned To</th>
+                <th>Actions</th>
               </tr>
             </thead>
-            <tbody>
-              @forelse ($permissions as $permission)
+            <tbody class="table-border-bottom-0">
+              @foreach ($permissions as $permission)
                 <tr>
-                  <th scope="row">{{ $loop->iteration }}</th>
+                  <td>{{ $loop->iteration }}</td>
                   <td>{{ $permission->name }}</td>
+                  <td>{{ $permission->guard_name }}</td>
                   <td>
-                    <span class="badge bg-light-success">{{ $permission->guard_name }}</span>
+                    @foreach ($permission->roles as $role)
+                      <span class="badge bg-label-info me-1">{{ $role->name }}</span>
+                    @endforeach
                   </td>
                   <td>
-                    @forelse ($permission->roles as $role)
-                      <span class="badge bg-light-success">{{ $role->name }}</span>
-                    @empty
-                      <span class="badge bg-light-danger">No roles</span>
-                    @endforelse
-                  </td>
-                  <td class="text-center" style="width: 100px;">
+                    <div class="demo-inline-spacing">
+                      <a data-bs-toggle="modal" data-bs-target="#modal-form-edit-permission-{{ $permission->id }}"
+                        class="btn btn-icon btn-secondary text-white">
+                        <span class="tf-icons bx bx-edit bx-22px"></span>
+                      </a>
+                      <a onclick="showSweetAlert('{{ $permission->id }}')" title="Delete"
+                        class="btn btn-icon btn-danger text-white">
+                        <span class="tf-icons bx bx-x bx-22px"></span>
+                      </a>
+                    </div>
 
-                    {{-- <a data-bs-toggle="modal" data-bs-target="#modal-form-edit-route-{{ $permission->id }}"
-                      class="btn icon btn-primary" title="Edit"><i class="bi bi-pencil"></i></a> --}}
-                    {{-- <a class="btn icon btn-danger" title="Delete" onclick="showSweetAlert('{{ $permission->id }}')">
-                      <i class="bi bi-x-lg"></i>
-                    </a> --}}
+                    <form id="deleteForm_{{ $permission->id }}"
+                      action="{{ route('permission.destroy', $permission->id) }}" method="POST">
+                      @method('DELETE')
+                      @csrf
+                    </form>
 
-                    {{-- @include('components.form.modal.route.edit')
-                    @include('components.form.modal.route.delete') --}}
-
+                    @include('management-access.permission.modal-edit')
                   </td>
                 </tr>
-              @empty
-                <tr>
-                  <th colspan="5" class="text-center">No data to display</th>
-                </tr>
-              @endforelse
+              @endforeach
+
             </tbody>
           </table>
         </div>
       </div>
+      <!--/ Basic Bootstrap Table -->
+
     </div>
   </div>
-</x-app-layout>
+  <!--/ Role cards -->
+
+  <!-- Add Role Modal -->
+  @include('management-access.permission.modal-create')
+  <!--/ Add Role Modal -->
+
+  </div>
+  <!-- / Content -->
+
+  <script>
+    function showSweetAlert(getId) {
+      Swal.fire({
+        title: 'Are you sure?',
+        text: 'You won\'t be able to revert this!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, delete it!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // If the user clicks "Yes, delete it!", submit the corresponding form
+          document.getElementById('deleteForm_' + getId).submit();
+        }
+      });
+    }
+  </script>
+
+@endsection
+@push('after-script')
+@endpush

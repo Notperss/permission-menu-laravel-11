@@ -57,10 +57,11 @@ class PermissionController extends Controller
      */
     public function store(StorePermissionRequest $request)
     {
-        return Permission::create($request->validated())
-                ?->assignRole(! blank($request->roles) ? $request->roles : array())
-            ? back()->with('success', 'Permission has been created successfully!')
-            : back()->with('failed', 'Permission was not created successfully!');
+        Permission::create($request->validated())
+                ?->assignRole(! blank($request->roles) ? $request->roles : array());
+
+        alert()->success('success', 'Permission has been created successfully!');
+        return back();
     }
 
     /**
@@ -84,10 +85,11 @@ class PermissionController extends Controller
      */
     public function update(UpdatePermissionRequest $request, Permission $permission)
     {
-        return $permission->update($request->validated())
-            && $permission->syncRoles(! blank($request->roles) ? $request->roles : array())
-            ? back()->with('success', 'Permission has been updated successfully!')
-            : back()->with('failed', 'Permission was not updated successfully!');
+        $permission->update($request->validated())
+            && $permission->syncRoles(! blank($request->roles) ? $request->roles : array());
+
+        alert()->success('success', 'Permission has been updated successfully!');
+        return back();
     }
 
     /**
@@ -95,8 +97,9 @@ class PermissionController extends Controller
      */
     public function destroy(Permission $permission)
     {
-        return $permission->delete()
-            ? back()->with('success', 'Permission has been deleted successfully!')
-            : back()->with('failed', 'Permission was not deleted successfully!');
+        $permission->delete();
+
+        alert()->success('success', 'Permission has been deleted successfully!');
+        return back();
     }
 }

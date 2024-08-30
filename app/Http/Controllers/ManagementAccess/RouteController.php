@@ -51,7 +51,9 @@ class RouteController extends Controller
             $request->all(),
             array('status' => ! blank($request->status) ? true : false)
         ));
-        return back()->with('success', 'Route has been created successfully!');
+
+        alert()->success('Success', 'Route has been created successfully!');
+        return back();
     }
 
     /**
@@ -79,8 +81,9 @@ class RouteController extends Controller
             $request->all(),
             array('status' => ! blank($request->status) ? true : false)
         ));
-        return back()->with('success', 'Route has been created successfully!')
-        ;
+
+        alert()->success('Success', 'Route has been updated successfully!');
+        return back();
     }
 
     /**
@@ -88,8 +91,9 @@ class RouteController extends Controller
      */
     public function destroy(Route $route)
     {
-        return $route->delete()
-            ? back()->with('success', 'Route has been deleted successfully!')
-            : back()->with('failed', 'Route was not deleted successfully!');
+        $route->delete();
+
+        alert()->success('Success', 'Route has been deleted successfully!');
+        return back();
     }
 }

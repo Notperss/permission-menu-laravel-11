@@ -1,36 +1,68 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="csrf-token" content="{{ csrf_token() }}">
+<html lang="en" class="light-style layout-menu-fixed layout-compact " dir="ltr" data-theme="theme-default"
+  data-assets-path="../assets/" data-template="vertical-menu-template-free" data-style="light">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+<head>
+  {{-- meta --}}
+  @include('includes.meta')
 
-        <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+  <title>@yield('title') | User Management</title>
 
-        <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
-    </head>
-    <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100">
-            @include('layouts.navigation')
+  {{-- styles --}}
+  @stack('before-style')
+  @include('includes.style')
+  @stack('after-style')
 
-            <!-- Page Heading -->
-            @isset($header)
-                <header class="bg-white shadow">
-                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                        {{ $header }}
-                    </div>
-                </header>
-            @endisset
+</head>
 
-            <!-- Page Content -->
-            <main>
-                {{ $slot }}
-            </main>
+<body>
+
+  <!-- Layout wrapper -->
+  <div class="layout-wrapper layout-content-navbar  ">
+
+    <div class="layout-container">
+      {{-- menu --}}
+      {{-- @include('components.web.menu') --}}
+
+      <x-menu />
+
+      <!-- Layout container -->
+      <div class="layout-page">
+        @include('components.validation-errors')
+
+        {{-- navbar --}}
+        @include('components.web.navbar')
+
+        @include('sweetalert::alert')
+        <!-- Content wrapper -->
+        <div class="content-wrapper">
+
+          @yield('content')
+
+          {{-- footer --}}
+          @include('components.web.footer')
+
+          <div class="content-backdrop fade"></div>
         </div>
-    </body>
+        <!-- Content wrapper -->
+      </div>
+      <!-- / Layout page -->
+    </div>
+
+    <!-- Overlay -->
+    <div class="layout-overlay layout-menu-toggle"></div>
+
+  </div>
+  <!-- / Layout wrapper -->
+
+  <!-- Core JS -->
+  {{-- JS --}}
+  @stack('before-script')
+  @include('includes.script')
+  @stack('after-script')
+
+</body>
+
 </html>
+
+<!-- beautify ignore:end -->

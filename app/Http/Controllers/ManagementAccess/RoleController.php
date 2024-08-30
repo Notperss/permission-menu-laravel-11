@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers\ManagementAccess;
 
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Gate;
 use Spatie\Permission\Models\Permission;
 use App\Http\Requests\ManagementAccess\StoreRoleRequest;
 use App\Http\Requests\ManagementAccess\UpdateRoleRequest;
@@ -16,6 +19,10 @@ class RoleController extends Controller
      */
     public function index(Request $request)
     {
+        if (! Gate::allows('role.index')) {
+            abort(403);
+        }
+
         $roles = Role::query()
             ->when(! blank($request->search), function ($query) use ($request) {
                 return $query
@@ -27,9 +34,39 @@ class RoleController extends Controller
             })
             ->orderBy('name')
             ->paginate(10);
-        $permissions = Permission::orderBy('name')->get();
 
-        return view('management-access.role.index', compact('roles', 'permissions'));
+        $users = User::query()
+            ->when(! blank($request->search), function ($query) use ($request) {
+                return $query
+                    ->where('name', 'like', '%' . $request->search . '%')
+                    ->orWhere('email', 'like', '%' . $request->search . '%');
+            })
+            ->with('roles', function ($query) {
+                return $query->select('name');
+            })
+            ->latest()
+            ->paginate(10);
+        // $permissions = Permission::orderBy('name')->get();
+
+        DB::statement("SET SQL_MODE=''");
+        $role_permission = Permission::select('name', 'id')->groupBy('name')->get();
+
+        $permissions = array();
+
+        foreach ($role_permission as $per) {
+
+            $key = substr($per->name, 0, strpos($per->name, "."));
+
+            if (str_starts_with($per->name, $key)) {
+
+                $permissions[$key][] = $per;
+            }
+
+        }
+
+        // dd($permission);
+
+        return view('management-access.role.index', compact('roles', 'users', 'permissions'));
     }
 
     /**
@@ -45,10 +82,15 @@ class RoleController extends Controller
      */
     public function store(StoreRoleRequest $request)
     {
-        return Role::create($request->validated())
-                ?->givePermissionTo(! blank($request->permissions) ? $request->permissions : array())
-            ? back()->with('success', 'Role has been created successfully!')
-            : back()->with('failed', 'Role was not created successfully!');
+        if (! Gate::allows('role.store')) {
+            abort(403);
+        }
+
+        Role::create($request->validated())
+                ?->givePermissionTo(! blank($request->permissions) ? $request->permissions : array());
+
+        alert()->success('Success', 'Role has been created successfully!');
+        return back();
     }
 
     /**
@@ -72,19 +114,28 @@ class RoleController extends Controller
      */
     public function update(UpdateRoleRequest $request, Role $role)
     {
-        return $role->update($request->validated())
-            && $role->syncPermissions(! blank($request->permissions) ? $request->permissions : array())
-            ? back()->with('success', 'Role has been updated successfully!')
-            : back()->with('failed', 'Role was not updated successfully!');
-    }
+        if (! Gate::allows('role.update')) {
+            abort(403);
+        }
 
+        $role->update($request->validated())
+            && $role->syncPermissions(! blank($request->permissions) ? $request->permissions : array());
+
+        alert()->success('Success', 'Role has been updated successfully!');
+        return back();
+    }
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(Role $role)
     {
-        return $role->delete()
-            ? back()->with('success', 'Role has been deleted successfully!')
-            : back()->with('failed', 'Role was not deleted successfully!');
+        if (! Gate::allows('role.delete')) {
+            abort(403);
+        }
+
+        $role->delete();
+
+        alert()->success('Success', 'Role has been updated successfully!');
+        return back();
     }
 }
