@@ -17,50 +17,53 @@ class PermissionSeeder extends Seeder
         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
         $permissions = [
-            'general',
-            'setting',
+            // menu
+            'menu.main-menu',
+            'menu.role-permission',
+            'menu.access-management',
 
             // Dashboard
-            'dashboard_index',
+            'dashboard.index',
 
             // General Settings
-            'setting_index',
-            'setting_update',
+            // 'setting.index',
+            // 'setting.update',
 
             // User Management
-            'user_index',
-            'user_store',
-            'user_update',
-            'user_destroy',
-            'profile_index',
+            'user.index',
+            'user.store',
+            'user.update',
+            'user.destroy',
+            'profile.index',
 
             // Menu Management
-            'menu_index',
-            'menu_store',
-            'menu_update',
-            'menu_destroy',
-            'menu_item_index',
-            'menu_item_store',
-            'menu_item_update',
-            'menu_item_destroy',
+            'menu-group.index',
+            'menu-group.store',
+            'menu-group.update',
+            'menu-group.destroy',
+            //menu-item
+            'menu-item.index',
+            'menu-item.store',
+            'menu-item.update',
+            'menu-item.destroy',
 
             // Route Management
-            'route_index',
-            'route_store',
-            'route_update',
-            'route_destroy',
+            'route.index',
+            'route.store',
+            'route.update',
+            'route.destroy',
 
             // Role Management
-            'role_index',
-            'role_store',
-            'role_update',
-            'role_destroy',
+            'role.index',
+            'role.store',
+            'role.update',
+            'role.destroy',
 
             // Permission Management
-            'permission_index',
-            'permission_store',
-            'permission_update',
-            'permission_destroy',
+            'permission.index',
+            'permission.store',
+            'permission.update',
+            'permission.destroy',
         ];
 
         foreach ($permissions as $permission) {

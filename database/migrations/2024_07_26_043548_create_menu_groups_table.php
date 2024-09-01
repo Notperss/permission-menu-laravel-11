@@ -15,6 +15,7 @@ return new class extends Migration {
             $table->string('name');
             $table->boolean('status')->default(true);
             $table->string('permission_name');
+            $table->string('icon')->nullable();
             $table->integer('position');
             $table->timestamps();
         });

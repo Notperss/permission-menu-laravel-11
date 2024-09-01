@@ -17,6 +17,11 @@ class RoleSeeder extends Seeder
     public function run() : void
     {
         Model::unguard();
+        //permission for user
+        $permissionUser = [
+            'menu.main-menu',
+            'dashboard.index',
+        ];
 
         $superadmin = Role::create(['name' => 'super-admin',]);
         $user = Role::create(['name' => 'user']);
@@ -34,6 +39,12 @@ class RoleSeeder extends Seeder
 
         $makeSuperAdmin->assignRole($superadmin);
         $makeUser->assignRole($user);
+
+        $superadmin->givePermissionTo(Permission::all());
+        // $admin->givePermissionTo([$permissionAdmin]);
+        // $user->givePermissionTo([
+        //     $permissionUser,
+        // ]);
     }
 }
 
