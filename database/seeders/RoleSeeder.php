@@ -18,22 +18,22 @@ class RoleSeeder extends Seeder
     {
         Model::unguard();
         //permission for user
-        $permissionUser = [
-            'menu.main-menu',
-            'dashboard.index',
-        ];
+        // $permissionUser = [
+        //     'menu.main-menu',
+        //     'dashboard.index',
+        // ];
 
         $superadmin = Role::create(['name' => 'super-admin',]);
         $user = Role::create(['name' => 'user']);
 
         $makeSuperAdmin = User::factory()->create([
             'name' => 'super-admin',
-            'avatar' => 'images/default-avatar.png',
+            'avatar' => 'sneat/assets/img/avatars/1.png',
             'email' => 'super@admin.com',
         ]);
         $makeUser = User::factory()->create([
             'name' => 'user',
-            'avatar' => 'images/default-avatar.png',
+            'avatar' => 'sneat/assets/img/avatars/5.png',
             'email' => 'user@user.com',
         ]);
 

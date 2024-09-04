@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Gate;
 use Spatie\Permission\Models\Permission;
 use App\Http\Requests\ManagementAccess\StoreRoleRequest;
 use App\Http\Requests\ManagementAccess\UpdateRoleRequest;
@@ -19,10 +18,6 @@ class RoleController extends Controller
      */
     public function index(Request $request)
     {
-        if (! Gate::allows('role.index')) {
-            abort(403);
-        }
-
         $roles = Role::query()
             ->when(! blank($request->search), function ($query) use ($request) {
                 return $query
@@ -82,10 +77,6 @@ class RoleController extends Controller
      */
     public function store(StoreRoleRequest $request)
     {
-        if (! Gate::allows('role.store')) {
-            abort(403);
-        }
-
         Role::create($request->validated())
                 ?->givePermissionTo(! blank($request->permissions) ? $request->permissions : array());
 
@@ -114,10 +105,6 @@ class RoleController extends Controller
      */
     public function update(UpdateRoleRequest $request, Role $role)
     {
-        if (! Gate::allows('role.update')) {
-            abort(403);
-        }
-
         $role->update($request->validated())
             && $role->syncPermissions(! blank($request->permissions) ? $request->permissions : array());
 
@@ -129,10 +116,6 @@ class RoleController extends Controller
      */
     public function destroy(Role $role)
     {
-        if (! Gate::allows('role.delete')) {
-            abort(403);
-        }
-
         $role->delete();
 
         alert()->success('Success', 'Role has been updated successfully!');

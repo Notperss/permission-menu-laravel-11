@@ -13,7 +13,10 @@
         <div class="card-body">
           <div class="mb-3">
             <label for="route" class="form-label">Route Name</label>
-            <select class="form-control choices" id="route" name="route">
+            <select class="form-control choices @error('route')
+              is-invalid
+            @enderror"
+              id="route" name="route" required>
               <option value="" disabled selected>Choose</option>
               @foreach ($facadesRoutes as $facadesRoute)
                 @if (!blank($facadesRoute->getName()))
@@ -21,17 +24,35 @@
                 @endif
               @endforeach
             </select>
+            @error('route')
+              <a style="color: red">
+                <small>
+                  {{ $message }}
+                </small>
+              </a>
+            @enderror
             {{-- <x-form.validation.error name="route" /> --}}
           </div>
 
           <div class="mb-3">
             <label for="permission_name" class="form-label">Permission Name</label>
-            <select class="form-control choices" id="permission_name" name="permission_name">
+            <select
+              class="form-control choices @error('permission_name')
+              is-invalid
+            @enderror"
+              id="permission_name" name="permission_name" required>
               <option value="" disabled selected>Choose</option>
               @foreach ($permissions as $permission)
                 <option value="{{ $permission->name }}">{{ $permission->name }}</option>
               @endforeach
             </select>
+            @error('permission_name')
+              <a style="color: red">
+                <small>
+                  {{ $message }}
+                </small>
+              </a>
+            @enderror
             {{-- <x-form.validation.error name="permission_name" /> --}}
           </div>
 

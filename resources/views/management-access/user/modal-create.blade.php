@@ -13,13 +13,29 @@
         <div class="modal-body">
           <div class="mb-3">
             <label for="name" class="form-label">Name</label>
-            <input type="text" class="form-control" id="name" placeholder="Role Name" name="name">
+            <input type="text" class="form-control @error('name') is-invalid @enderror" id="name"
+              placeholder="User Name" name="name">
+            @error('name')
+              <a style="color: red">
+                <small>
+                  {{ $message }}
+                </small>
+              </a>
+            @enderror
             {{-- <x-form.validation.error name="name" /> --}}
           </div>
 
           <div class="mb-3">
             <label for="email" class="form-label">Email</label>
-            <input type="email" class="form-control" id="email" placeholder="Guard Name" name="email">
+            <input type="email" class="form-control @error('email') is-invalid @enderror" id="email"
+              placeholder="Email" name="email">
+            @error('email')
+              <a style="color: red">
+                <small>
+                  {{ $message }}
+                </small>
+              </a>
+            @enderror
             {{-- <x-form.validation.error name="email" /> --}}
           </div>
 
@@ -47,12 +63,19 @@
 
           <div class="mb-3">
             <label for="role" class="form-label">Role Name</label>
-            <select class="form-control choices" id="role" name="role">
+            <select class="form-control choices @error('role') is-invalid @enderror" id="role" name="role">
               <option value=""disabled selected>Choose</option>
               @foreach ($roles as $role)
                 <option value="{{ $role->name }}">{{ $role->name }}</option>
               @endforeach
             </select>
+            @error('role')
+              <a style="color: red">
+                <small>
+                  {{ $message }}
+                </small>
+              </a>
+            @enderror
             {{-- <x-form.validation.error name="role" /> --}}
           </div>
 

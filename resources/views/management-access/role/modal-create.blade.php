@@ -15,7 +15,18 @@
           @csrf
           <div class="col-12 mb-6">
             <label class="form-label" for="name">Role Name</label>
-            <input type="text" id="name" name="name" class="form-control" placeholder="Enter a role name" />
+            <input type="text" id="name" name="name"
+              class="form-control @error('name')
+              is-invalid
+            @enderror"
+              placeholder="Enter a role name" required />
+            @error('name')
+              <a style="color: red">
+                <small>
+                  {{ $message }}
+                </small>
+              </a>
+            @enderror
           </div>
           <div class="col-12 mb-6">
             <label class="form-label" for="guard_name">Guard Name</label>

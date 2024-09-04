@@ -20,11 +20,13 @@
       <div class="card-header">
         <div class="d-flex justify-content-between align-items-center ">
           <h4 class="fw-normal mb-0 text-body">Route</h4>
-          <button type="button" class="btn btn-primary btn-md" data-bs-toggle="modal"
-            data-bs-target="#modal-form-add-route">
-            <i class="bi bi-plus-lg"></i>
-            Add
-          </button>
+          @can('route.store')
+            <button type="button" class="btn btn-primary btn-md" data-bs-toggle="modal"
+              data-bs-target="#modal-form-add-route">
+              <i class="bi bi-plus-lg"></i>
+              Add
+            </button>
+          @endcan
         </div>
       </div>
       <div class="table-responsive text-nowrap mx-2">
@@ -53,23 +55,27 @@
                 </td>
                 <td>
                   <div class="demo-inline-spacing">
-                    <a data-bs-toggle="modal" data-bs-target="#modal-form-edit-route-{{ $route->id }}"
-                      class="btn btn-icon btn-secondary text-white">
-                      <span class="tf-icons bx bx-edit bx-22px"></span>
-                    </a>
-                    <a onclick="showSweetAlert('{{ $route->id }}')" title="Delete"
-                      class="btn btn-icon btn-danger text-white">
-                      <span class="tf-icons bx bx-x bx-22px"></span>
-                    </a>
+                    @can('route.update')
+                      <a data-bs-toggle="modal" data-bs-target="#modal-form-edit-route-{{ $route->id }}"
+                        class="btn btn-icon btn-secondary text-white">
+                        <span class="tf-icons bx bx-edit bx-22px"></span>
+                      </a>
+                      @include('management-access.route.modal-edit')
+                    @endcan
+
+                    @can('route.destroy')
+                      <a onclick="showSweetAlert('{{ $route->id }}')" title="Delete"
+                        class="btn btn-icon btn-danger text-white">
+                        <span class="tf-icons bx bx-x bx-22px"></span>
+                      </a>
+                      <form id="deleteForm_{{ $route->id }}" action="{{ route('route.destroy', $route->id) }}"
+                        method="POST">
+                        @method('DELETE')
+                        @csrf
+                      </form>
+                    @endcan
                   </div>
 
-                  <form id="deleteForm_{{ $route->id }}" action="{{ route('route.destroy', $route->id) }}"
-                    method="POST">
-                    @method('DELETE')
-                    @csrf
-                  </form>
-
-                  @include('management-access.route.modal-edit')
                 </td>
               </tr>
             @endforeach

@@ -5,14 +5,14 @@ namespace App\Http\Requests\ManagementAccess;
 use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateRoleRequest extends FormRequest
+class UpdateUserRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize() : bool
     {
-        return $this->user()->hasAnyRole(['super-admin']);
+        return true;
     }
 
     /**
@@ -23,10 +23,10 @@ class UpdateRoleRequest extends FormRequest
     public function rules() : array
     {
         return [
-            'name' => ['required', 'string', Rule::unique('roles')->ignore($this->role)],
-            'guard_name' => ['nullable', 'string'],
-            'description' => ['nullable', 'string'],
-            'permissions.*' => ['nullable', 'string'],
+            'name' => ['required', 'string'],
+            'email' => ['required', 'string', 'email:rfc', Rule::unique('users')->ignore($this->user)],
+            'role' => ['required', 'string'],
+            'verified' => ['nullable', 'boolean'],
         ];
     }
 
@@ -34,7 +34,10 @@ class UpdateRoleRequest extends FormRequest
     {
         return [
             'name.required' => 'A name is required',
-            'name.unique' => 'A name is already in use',
+            'email.required' => 'A email is required',
+            'email.email' => 'Please provide a valid email address.',
+            'email.unique' => 'A email has already in use',
+            'role.required' => 'A role is required',
             'string' => 'This field must be a valid string',
         ];
     }

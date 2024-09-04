@@ -57,12 +57,12 @@ class RouteSeeder extends Seeder
         ]);
 
         // User Profile
-        Route::insert([
-            [
-                'route' => 'profile.index',
-                'permission_name' => 'profile.index',
-            ],
-        ]);
+        // Route::insert([
+        //     [
+        //         'route' => 'profile.edit',
+        //         'permission_name' => 'profile.edit',
+        //     ],
+        // ]);
 
         // Menu Group Management
         Route::insert([

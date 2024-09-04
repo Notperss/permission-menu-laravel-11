@@ -1,48 +1,64 @@
-<section>
-    <header>
-        <h2 class="text-lg font-medium text-gray-900">
-            {{ __('Update Password') }}
-        </h2>
-
-        <p class="mt-1 text-sm text-gray-600">
-            {{ __('Ensure your account is using a long, random password to stay secure.') }}
-        </p>
-    </header>
-
-    <form method="post" action="{{ route('password.update') }}" class="mt-6 space-y-6">
+<!-- Modals add menu -->
+<div id="modal-form-change-password" class="modal fade modal-form-user" tabindex="-1"
+  aria-labelledby="modal-form-change-password-label" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <form id="modal-form" action="{{ route('password.update') }}" method="post">
         @csrf
         @method('put')
 
-        <div>
-            <x-input-label for="update_password_current_password" :value="__('Current Password')" />
-            <x-text-input id="update_password_current_password" name="current_password" type="password" class="mt-1 block w-full" autocomplete="current-password" />
-            <x-input-error :messages="$errors->updatePassword->get('current_password')" class="mt-2" />
+        <div class="modal-header">
+          <h5 class="modal-title" id="modal-form-change-password-label">Change Password</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> </button>
         </div>
+        <div class="modal-body">
 
-        <div>
-            <x-input-label for="update_password_password" :value="__('New Password')" />
-            <x-text-input id="update_password_password" name="password" type="password" class="mt-1 block w-full" autocomplete="new-password" />
-            <x-input-error :messages="$errors->updatePassword->get('password')" class="mt-2" />
+          <div class="mb-3">
+            <label for="current_password" class="form-label">Current Password</label>
+            <input type="password" class="form-control @error('current_password') is-invalid @enderror"
+              id="current_password" placeholder="Enter Current Password" name="current_password">
+            @error('current_password')
+              <a style="color: red">
+                <small>
+                  {{ $message }}
+                </small>
+              </a>
+            @enderror
+          </div>
+
+          <div class="mb-3">
+            <label for="password" class="form-label">New Password</label>
+            <input type="password" class="form-control @error('password') is-invalid @enderror" id="password"
+              placeholder="Enter New Password" name="password">
+            @error('password')
+              <a style="color: red">
+                <small>
+                  {{ $message }}
+                </small>
+              </a>
+            @enderror
+          </div>
+
+          <div class="mb-3">
+            <label for="password_confirmation" class="form-label">Confirm New Password</label>
+            <input type="password" class="form-control @error('password_confirmation') is-invalid @enderror"
+              id="password_confirmation" placeholder="New Password Confirmation" name="password_confirmation">
+            @error('password_confirmation')
+              <a style="color: red">
+                <small>
+                  {{ $message }}
+                </small>
+              </a>
+            @enderror
+          </div>
+
         </div>
-
-        <div>
-            <x-input-label for="update_password_password_confirmation" :value="__('Confirm Password')" />
-            <x-text-input id="update_password_password_confirmation" name="password_confirmation" type="password" class="mt-1 block w-full" autocomplete="new-password" />
-            <x-input-error :messages="$errors->updatePassword->get('password_confirmation')" class="mt-2" />
+        <div class="modal-footer">
+          <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary ">Save</button>
         </div>
+      </form>
 
-        <div class="flex items-center gap-4">
-            <x-primary-button>{{ __('Save') }}</x-primary-button>
-
-            @if (session('status') === 'password-updated')
-                <p
-                    x-data="{ show: true }"
-                    x-show="show"
-                    x-transition
-                    x-init="setTimeout(() => show = false, 2000)"
-                    class="text-sm text-gray-600"
-                >{{ __('Saved.') }}</p>
-            @endif
-        </div>
-    </form>
-</section>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

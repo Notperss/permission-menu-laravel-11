@@ -18,7 +18,6 @@
 
 
     <h4 class="mb-1">Roles List</h4>
-
     <p class="mb-6">A role provided access to predefined menus and features so that depending on assigned role an
       administrator can have access to what user needs.</p>
     <!-- Role cards -->
@@ -30,20 +29,25 @@
             <div class="card-body">
               <div class="d-flex justify-content-between align-items-center mb-4">
                 <h6 class="fw-normal mb-0 text-body">Total {{ $role->users->count() }} users</h6>
-                <a onclick="showSweetAlert('{{ $role->id }}')" class="justify-content-end" title="delete role">
-                  <i class="bx bx-x"></i>
-                </a>
+                @can('role.destroy')
+                  <a onclick="showSweetAlert('{{ $role->id }}')" class="justify-content-end" title="delete role">
+                    <i class="bx bx-x"></i>
+                  </a>
+                @endcan
               </div>
               <form id="deleteForm_{{ $role->id }}" action="{{ route('role.destroy', $role->id) }}" method="POST">
                 @method('DELETE')
                 @csrf
               </form>
+
               <div class="d-flex justify-content-between align-items-end">
                 <div class="role-heading">
                   <h5 class="mb-1">{{ $role->name }}</h5>
-                  <a href="javascript:;" data-bs-toggle="modal" data-bs-target="#editRoleModal-{{ $role->id }}"
-                    class="role-edit-modal"><span>Edit Role</span></a>
-                  @include('management-access.role.modal-edit')
+                  @can('role.update')
+                    <a href="javascript:;" data-bs-toggle="modal" data-bs-target="#editRoleModal-{{ $role->id }}"
+                      class="role-edit-modal"><span>Edit Role</span></a>
+                    @include('management-access.role.modal-edit')
+                  @endcan
                 </div>
                 <a href="javascript:void(0);"><i class="bx bx-copy bx-md text-muted"></i></a>
               </div>
@@ -52,7 +56,7 @@
         </div>
       @endforeach
 
-      @can('role.create')
+      @can('role.store')
         <div class="col-xl-4 col-lg-6 col-md-6 my-3">
           <div class="card h-100">
             <div class="row h-100">
@@ -74,7 +78,6 @@
           </div>
         </div>
       @endcan
-
 
       <div class="col-12">
 
@@ -113,23 +116,27 @@
                     </td>
                     <td>
                       <div class="demo-inline-spacing">
-                        <a data-bs-toggle="modal" data-bs-target="#modal-form-edit-user-{{ $user->id }}"
-                          class="btn btn-icon btn-secondary text-white">
-                          <span class="tf-icons bx bx-edit bx-22px"></span>
-                        </a>
-                        <a onclick="showSweetAlert('{{ $user->id }}')" title="Delete"
-                          class="btn btn-icon btn-danger text-white">
-                          <span class="tf-icons bx bx-x bx-22px"></span>
-                        </a>
+                        @can('user.update')
+                          <a data-bs-toggle="modal" data-bs-target="#modal-form-edit-user-{{ $user->id }}"
+                            class="btn btn-icon btn-secondary text-white">
+                            <span class="tf-icons bx bx-edit bx-22px"></span>
+                          </a>
+                          @include('management-access.user.modal-edit')
+                        @endcan
+
+                        @can('user.destroy')
+                          <a onclick="showSweetAlert('{{ $user->id }}')" title="Delete"
+                            class="btn btn-icon btn-danger text-white">
+                            <span class="tf-icons bx bx-x bx-22px"></span>
+                          </a>
+
+                          <form id="deleteForm_{{ $user->id }}" action="{{ route('user.destroy', $user->id) }}"
+                            method="POST">
+                            @method('DELETE')
+                            @csrf
+                          </form>
+                        @endcan
                       </div>
-
-                      <form id="deleteForm_{{ $user->id }}" action="{{ route('user.destroy', $user->id) }}"
-                        method="POST">
-                        @method('DELETE')
-                        @csrf
-                      </form>
-
-                      @include('management-access.user.modal-edit')
                     </td>
                   </tr>
                 @endforeach
@@ -169,5 +176,3 @@
   </script>
 
 @endsection
-@push('after-script')
-@endpush

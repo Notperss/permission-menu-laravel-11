@@ -28,4 +28,13 @@ class UpdatePermissionRequest extends FormRequest
             'roles.*' => ['nullable', 'string'],
         ];
     }
+
+    public function messages() : array
+    {
+        return [
+            'name.required' => 'A name is required',
+            'string' => 'This field must be a valid string',
+            // 'starts_with' => 'Icon must start with "bx-" or "bxs-"',
+        ];
+    }
 }

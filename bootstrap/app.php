@@ -17,7 +17,10 @@ return Application::configure(basePath: dirname(__DIR__))
             'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
             'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
             'Alert' => RealRashid\SweetAlert\Facades\Alert::class,
+            // custom by developer
+            'route.permission' => \App\Http\Middleware\RouteMiddleware::class,
         ]);
+        $middleware->appendToGroup('web', 'route.permission');
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

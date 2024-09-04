@@ -40,10 +40,11 @@
         <li class="nav-item navbar-dropdown dropdown-user dropdown">
           <a class="nav-link dropdown-toggle hide-arrow p-0" href="javascript:void(0);" data-bs-toggle="dropdown">
             <div class="avatar avatar-online">
-              @if (auth()->user()->profile_photo_path)
-                <img src="{{ auth()->user()->profile_photo_path }}" alt class="w-px-40 h-auto rounded-circle">
+              @if (auth()->user()->avatar)
+                <img src="{{ auth()->user()->avatar }}" alt class="w-px-40 h-auto rounded-circle">
               @else
-                <img src="{{ asset('sneat/assets/img/avatars/1.png') }}" alt class="w-px-40 h-auto rounded-circle">
+                <img src="{{ asset('sneat/assets/img/avatars/default.jpg') }}" alt
+                  class="w-px-40 h-auto rounded-circle">
               @endif
             </div>
           </a>
@@ -53,10 +54,10 @@
                 <div class="d-flex">
                   <div class="flex-shrink-0 me-3">
                     <div class="avatar avatar-online">
-                      @if (auth()->user()->profile_photo_path)
-                        <img src="{{ auth()->user()->profile_photo_path }}" alt class="w-px-40 h-auto rounded-circle">
+                      @if (auth()->user()->avatar)
+                        <img src="{{ auth()->user()->avatar }}" alt class="w-px-40 h-auto rounded-circle">
                       @else
-                        <img src="{{ asset('sneat/assets/img/avatars/1.png') }}" alt
+                        <img src="{{ asset('sneat/assets/img/avatars/default.jpg') }}" alt
                           class="w-px-40 h-auto rounded-circle">
                       @endif
                     </div>
@@ -72,7 +73,7 @@
               <div class="dropdown-divider my-1"></div>
             </li>
             <li>
-              <a class="dropdown-item" href="#">
+              <a class="dropdown-item" href="{{ route('profile.edit') }}">
                 <i class="bx bx-user bx-md me-3"></i><span>My Profile</span>
               </a>
             </li>

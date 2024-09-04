@@ -14,7 +14,15 @@
         <div class="modal-body">
           <div class="mb-3">
             <label for="name" class="form-label">Name</label>
-            <input type="text" class="form-control" id="name" placeholder="Menu Name" name="name">
+            <input type="text" class="form-control @error('name') is-invalid @enderror" id="name"
+              placeholder="Menu Name" name="name" required>
+            @error('name')
+              <a style="color: red">
+                <small>
+                  {{ $message }}
+                </small>
+              </a>
+            @enderror
             {{-- <x-form.validation.error name="name" /> --}}
           </div>
 
@@ -27,7 +35,8 @@
 
           <div class="mb-3">
             <label for="route" class="form-label">Route</label>
-            <select class="form-control" id="route" name="route" data-choices data-choices-removeItem>
+            <select class="form-control @error('route') is-invalid @enderror" id="route" name="route" data-choices
+              data-choices-removeItem required>
               <option value="" disabled selected>Choose</option>
               @foreach ($routes as $route)
                 @if (!blank($route->getName()))
@@ -35,18 +44,32 @@
                 @endif
               @endforeach
             </select>
+            @error('route')
+              <a style="color: red">
+                <small>
+                  {{ $message }}
+                </small>
+              </a>
+            @enderror
             {{-- <x-form.validation.error name="route" /> --}}
           </div>
 
           <div class="mb-3">
             <label for="permission_name" class="form-label">Permission Name</label>
-            <select class="form-control" id="permission_name" name="permission_name" data-choices
-              data-choices-removeItem>
+            <select class="form-control @error('permission_name') is-invalid @enderror" id="permission_name"
+              name="permission_name" data-choices data-choices-removeItem required>
               <option value="" disabled selected>Choose</option>
               @foreach ($permissions as $permission)
                 <option value="{{ $permission->name }}">{{ $permission->name }}</option>
               @endforeach
             </select>
+            @error('permission_name')
+              <a style="color: red">
+                <small>
+                  {{ $message }}
+                </small>
+              </a>
+            @enderror
             {{-- <x-form.validation.error name="permission_name" /> --}}
           </div>
 

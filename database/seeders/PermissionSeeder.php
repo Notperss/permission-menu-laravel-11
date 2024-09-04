@@ -34,13 +34,17 @@ class PermissionSeeder extends Seeder
             'user.store',
             'user.update',
             'user.destroy',
-            'profile.index',
+
+            //profile
+            // 'profile.edit',
+            // 'profile.update',
 
             // Menu Management
             'menu-group.index',
             'menu-group.store',
             'menu-group.update',
             'menu-group.destroy',
+
             //menu-item
             'menu-item.index',
             'menu-item.store',

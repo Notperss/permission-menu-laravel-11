@@ -25,11 +25,15 @@
       <div class="card-header">
         <div class="d-flex justify-content-between align-items-center">
           <h4 class="fw-normal mb-0 text-body">Menu Item - {{ $menu->name }}</h4>
-          <button type="button" class="btn btn-primary btn-md" data-bs-toggle="modal"
-            data-bs-target="#modal-form-add-menu">
-            <i class="bi bi-plus-lg"></i>
-            Add
-          </button>
+
+          @can('menu-item.store')
+            <button type="button" class="btn btn-primary btn-md" data-bs-toggle="modal"
+              data-bs-target="#modal-form-add-menu">
+              <i class="bi bi-plus-lg"></i>
+              Add
+            </button>
+          @endcan
+
         </div>
       </div>
       <div class="table-responsive text-nowrap mx-2">
@@ -58,23 +62,30 @@
                 </td>
                 <td>
                   <div class="demo-inline-spacing">
-                    <a data-bs-toggle="modal" data-bs-target="#modal-form-edit-menu-{{ $menuItem->id }}"
-                      class="btn btn-icon btn-secondary text-white">
-                      <span class="tf-icons bx bx-edit bx-22px"></span>
-                    </a>
-                    <a onclick="showSweetAlert('{{ $menuItem->id }}')" title="Delete"
-                      class="btn btn-icon btn-danger text-white">
-                      <span class="tf-icons bx bx-x bx-22px"></span>
-                    </a>
+                    @can('menu-item.update')
+                      <a data-bs-toggle="modal" data-bs-target="#modal-form-edit-menu-{{ $menuItem->id }}"
+                        class="btn btn-icon btn-secondary text-white">
+                        <span class="tf-icons bx bx-edit bx-22px"></span>
+                      </a>
+                      @include('management-access.menu-item.modal-edit')
+                    @endcan
+
+                    @can('menu-item.destroy')
+                      <a onclick="showSweetAlert('{{ $menuItem->id }}')" title="Delete"
+                        class="btn btn-icon btn-danger text-white">
+                        <span class="tf-icons bx bx-x bx-22px"></span>
+                      </a>
+                      <form id="deleteForm_{{ $menuItem->id }}"
+                        action="{{ route('menu.item.destroy', [$menu->id, $menuItem->id]) }}" method="POST">
+                        @method('DELETE')
+                        @csrf
+                      </form>
+                    @endcan
+
                   </div>
 
-                  <form id="deleteForm_{{ $menuItem->id }}"
-                    action="{{ route('menu.item.destroy', [$menu->id, $menuItem->id]) }}" method="POST">
-                    @method('DELETE')
-                    @csrf
-                  </form>
 
-                  @include('management-access.menu-item.modal-edit')
+
                 </td>
               </tr>
             @endforeach

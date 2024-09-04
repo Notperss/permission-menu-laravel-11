@@ -20,11 +20,14 @@
       <div class="card-header">
         <div class="d-flex justify-content-between align-items-center ">
           <h4 class="fw-normal mb-0 text-body">Users</h4>
-          <button type="button" class="btn btn-primary btn-md" data-bs-toggle="modal"
-            data-bs-target="#modal-form-add-user">
-            <i class="bi bi-plus-lg"></i>
-            Add
-          </button>
+          @can('user.store')
+            <button type="button" class="btn btn-primary btn-md" data-bs-toggle="modal"
+              data-bs-target="#modal-form-add-user">
+              <i class="bi bi-plus-lg"></i>
+              Add
+            </button>
+          @endcan
+
         </div>
       </div>
       <div class="table-responsive text-nowrap mx-2">
@@ -59,23 +62,27 @@
                 </td>
                 <td>
                   <div class="demo-inline-spacing">
-                    <a data-bs-toggle="modal" data-bs-target="#modal-form-edit-user-{{ $user->id }}"
-                      class="btn btn-icon btn-secondary text-white">
-                      <span class="tf-icons bx bx-edit bx-22px"></span>
-                    </a>
-                    <a onclick="showSweetAlert('{{ $user->id }}')" title="Delete"
-                      class="btn btn-icon btn-danger text-white">
-                      <span class="tf-icons bx bx-x bx-22px"></span>
-                    </a>
+                    @can('user.update')
+                      <a data-bs-toggle="modal" data-bs-target="#modal-form-edit-user-{{ $user->id }}"
+                        class="btn btn-icon btn-secondary text-white">
+                        <span class="tf-icons bx bx-edit bx-22px"></span>
+                      </a>
+                      @include('management-access.user.modal-edit')
+                    @endcan
+
+                    @can('user.destroy')
+                      <a onclick="showSweetAlert('{{ $user->id }}')" title="Delete"
+                        class="btn btn-icon btn-danger text-white">
+                        <span class="tf-icons bx bx-x bx-22px"></span>
+                      </a>
+                      <form id="deleteForm_{{ $user->id }}" action="{{ route('user.destroy', $user->id) }}"
+                        method="POST">
+                        @method('DELETE')
+                        @csrf
+                      </form>
+                    @endcan
                   </div>
 
-                  <form id="deleteForm_{{ $user->id }}" action="{{ route('user.destroy', $user->id) }}"
-                    method="POST">
-                    @method('DELETE')
-                    @csrf
-                  </form>
-
-                  @include('management-access.user.modal-edit')
                 </td>
               </tr>
             @endforeach
@@ -86,7 +93,6 @@
     </div>
     <!--/ Basic Bootstrap Table -->
     @include('management-access.user.modal-create')
-
 
   </div>
   <!-- / Content -->

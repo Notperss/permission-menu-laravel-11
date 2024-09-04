@@ -15,25 +15,41 @@
         <div class="modal-body">
           <div class="mb-3">
             <label for="name" class="form-label">Name</label>
-            <input type="text" class="form-control" id="name" placeholder="Menu Name" name="name"
-              value="{{ $menuGroup->name }}">
+            <input type="text" class="form-control @error('name') is-invalid @enderror" id="name"
+              placeholder="Menu Name" name="name" value="{{ $menuGroup->name }}" required>
+            @error('name')
+              <a style="color: red">
+                <small>{{ $message }}</small>
+              </a>
+            @enderror
             {{-- <x-form.validation.error name="name" /> --}}
           </div>
 
           <div class="mb-3">
             <label for="icon" class="form-label">Icon</label>
-            <input type="text" class="form-control" id="icon" placeholder="Boxicons (eg: ri-home-smile)"
-              value="{{ $menuGroup->icon }}" name="icon">
+            <input type="text" class="form-control @error('icon') is-invalid @enderror" id="icon"
+              placeholder="Boxicons (eg: bx-home-smile)" value="{{ $menuGroup->icon }}" name="icon" required>
+            @error('icon')
+              <a style="color: red">
+                <small>{{ $message }}</small>
+              </a>
+            @enderror
             {{-- <x-form.validation.error name="icon" /> --}}
           </div>
 
           <div class="mb-3">
             <label for="permission_name" class="form-label">Permission Name</label>
-            <select class="form-control choices" id="permission_name" name="permission_name">
+            <select class="form-control choices @error('permission_name') is-invalid @enderror" id="permission_name"
+              name="permission_name" required>
               @foreach ($permissions as $permission)
                 <option @selected($menuGroup->permission_name == $permission->name) value="{{ $permission->name }}">{{ $permission->name }}</option>
               @endforeach
             </select>
+            @error('permission_name')
+              <a style="color: red">
+                <small>{{ $message }}</small>
+              </a>
+            @enderror
             {{-- <x-form.validation.error name="permission_name" /> --}}
           </div>
 

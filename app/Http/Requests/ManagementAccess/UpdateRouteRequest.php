@@ -28,4 +28,13 @@ class UpdateRouteRequest extends FormRequest
             'status' => ['nullable', 'boolean'],
         ];
     }
+
+    public function messages() : array
+    {
+        return [
+            'permission_name.required' => 'A permission name is required',
+            'route.required' => 'A route is required',
+            'string' => 'This field must be a valid string',
+        ];
+    }
 }

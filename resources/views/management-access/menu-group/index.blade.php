@@ -20,11 +20,15 @@
       <div class="card-header">
         <div class="d-flex justify-content-between align-items-center ">
           <h4 class="fw-normal mb-0 text-body">Menu Group</h4>
-          <button type="button" class="btn btn-primary btn-md " data-bs-toggle="modal"
-            data-bs-target="#modal-form-add-menu">
-            <i class="bi bi-plus-lg"></i>
-            Add
-          </button>
+
+          @can('menu-group.store')
+            <button type="button" class="btn btn-primary btn-md " data-bs-toggle="modal"
+              data-bs-target="#modal-form-add-menu">
+              <i class="bi bi-plus-lg"></i>
+              Add
+            </button>
+          @endcan
+
         </div>
       </div>
       <div class="table-responsive text-nowrap mx-2">
@@ -53,26 +57,33 @@
                 </td>
                 <td>
                   <div class="demo-inline-spacing">
-                    <a href="{{ route('menu.item.index', $menuGroup) }}" class="btn btn-icon btn-primary">
-                      <span class="tf-icons bx bx-plus bx-22px"></span>
-                    </a>
-                    <a data-bs-toggle="modal" data-bs-target="#modal-form-edit-menu-{{ $menuGroup->id }}"
-                      class="btn btn-icon btn-secondary text-white">
-                      <span class="tf-icons bx bx-edit bx-22px"></span>
-                    </a>
-                    <a onclick="showSweetAlert('{{ $menuGroup->id }}')" title="Delete"
-                      class="btn btn-icon btn-danger text-white">
-                      <span class="tf-icons bx bx-x bx-22px"></span>
-                    </a>
+                    @can('menu-item.index')
+                      <a href="{{ route('menu.item.index', $menuGroup) }}" class="btn btn-icon btn-primary">
+                        <span class="tf-icons bx bx-plus bx-22px"></span>
+                      </a>
+                    @endcan
+
+                    @can('menu-group.update')
+                      <a data-bs-toggle="modal" data-bs-target="#modal-form-edit-menu-{{ $menuGroup->id }}"
+                        class="btn btn-icon btn-secondary text-white">
+                        <span class="tf-icons bx bx-edit bx-22px"></span>
+                      </a>
+                      @include('management-access.menu-group.modal-edit')
+                    @endcan
+
+                    @can('menu-group.destroy')
+                      <a onclick="showSweetAlert('{{ $menuGroup->id }}')" title="Delete"
+                        class="btn btn-icon btn-danger text-white">
+                        <span class="tf-icons bx bx-x bx-22px"></span>
+                      </a>
+                      <form id="deleteForm_{{ $menuGroup->id }}"
+                        action="{{ route('menu.destroy', encrypt($menuGroup->id)) }}" method="POST">
+                        @method('DELETE')
+                        @csrf
+                      </form>
+                    @endcan
+
                   </div>
-
-                  <form id="deleteForm_{{ $menuGroup->id }}" action="{{ route('menu.destroy', encrypt($menuGroup->id)) }}"
-                    method="POST">
-                    @method('DELETE')
-                    @csrf
-                  </form>
-
-                  @include('management-access.menu-group.modal-edit')
 
                 </td>
               </tr>

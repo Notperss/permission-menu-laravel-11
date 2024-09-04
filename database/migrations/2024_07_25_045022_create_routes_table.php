@@ -15,7 +15,7 @@ return new class extends Migration {
             $table->string('route');
             $table->string('permission_name');
             $table->boolean('status')->default(true);
-            $table->longText('description');
+            $table->longText('description')->nullable();
             $table->timestamps();
         });
     }

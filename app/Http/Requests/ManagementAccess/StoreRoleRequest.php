@@ -22,10 +22,19 @@ class StoreRoleRequest extends FormRequest
     public function rules() : array
     {
         return [
-            'name' => ['required', 'string'],
+            'name' => ['required', 'string', 'unique:roles'],
             'guard_name' => ['nullable', 'string'],
             'description' => ['nullable', 'string'],
             'permissions.*' => ['nullable', 'string'],
+        ];
+    }
+
+    public function messages() : array
+    {
+        return [
+            'name.required' => 'A name is required',
+            'name.unique' => 'A name is already in use',
+            'string' => 'This field must be a valid string',
         ];
     }
 }

@@ -35,7 +35,8 @@
 
       <!-- Layout container -->
       <div class="layout-page">
-        @include('components.validation-errors')
+        {{-- @include('components.validation-errors') --}}
+        <x-validation-errors />
 
         {{-- navbar --}}
         @include('components.web.navbar')

@@ -54,7 +54,6 @@ class MenuItemController extends Controller
      */
     public function store(StoreMenuItemRequest $request, MenuGroup $menu)
     {
-        // dd($request->all(), $menu->id, $menu->items()->max('position') + 1);
         MenuItem::create(array_merge(
             $request->all(),
             array(
